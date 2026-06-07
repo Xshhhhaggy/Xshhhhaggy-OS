@@ -61,7 +61,10 @@ export default function Dashboard() {
           >
             🛍️ Shop
           </button>
-          <button className="bg-xcard border border-xborder p-4 rounded-2xl">
+          <button 
+            onClick={() => navigate('/journal')}
+            className="bg-xcard border border-xborder p-4 rounded-2xl"
+          >
             📓 Journal
           </button>
           <button className="bg-xcard border border-xborder p-4 rounded-2xl">
@@ -75,7 +78,7 @@ export default function Dashboard() {
         <button className="text-xs text-xlime">Home</button>
         <button onClick={() => navigate('/walk')} className="text-xs text-xmuted">Walk</button>
         <button onClick={() => navigate('/store')} className="text-xs text-xmuted">Store</button>
-        <button className="text-xs text-xmuted">Profile</button>
+        <button onClick={() => navigate('/journal')} className="text-xs text-xmuted">Journal</button>
       </div>
     </div>
   )
