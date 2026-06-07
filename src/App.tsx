@@ -7,6 +7,7 @@ import WalkSession from './owner/WalkSession'
 import Store from './owner/Store'
 import JournalSync from './owner/JournalSync'
 import Leaderboard from './components/Leaderboard'
+import Sniffari from './games/Sniffari'
 import './index.css'
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/journal" element={<JournalSync />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/sniffari" element={<Sniffari />} />
       </Routes>
     </BrowserRouter>
   )
