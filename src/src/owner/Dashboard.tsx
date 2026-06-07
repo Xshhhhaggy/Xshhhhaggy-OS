@@ -55,7 +55,10 @@ export default function Dashboard() {
           >
             🚶 Start Walk
           </button>
-          <button className="bg-xcard border border-xborder p-4 rounded-2xl">
+          <button 
+            onClick={() => navigate('/store')}
+            className="bg-xcard border border-xborder p-4 rounded-2xl"
+          >
             🛍️ Shop
           </button>
           <button className="bg-xcard border border-xborder p-4 rounded-2xl">
@@ -70,8 +73,8 @@ export default function Dashboard() {
       {/* Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 bg-xsurface border-t border-xborder flex justify-around py-3">
         <button className="text-xs text-xlime">Home</button>
-        <button className="text-xs text-xmuted">Walk</button>
-        <button className="text-xs text-xmuted">Store</button>
+        <button onClick={() => navigate('/walk')} className="text-xs text-xmuted">Walk</button>
+        <button onClick={() => navigate('/store')} className="text-xs text-xmuted">Store</button>
         <button className="text-xs text-xmuted">Profile</button>
       </div>
     </div>
