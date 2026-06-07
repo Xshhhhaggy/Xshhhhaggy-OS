@@ -5,6 +5,7 @@ import Auth from './auth/Auth'
 import Dashboard from './owner/Dashboard'
 import WalkSession from './owner/WalkSession'
 import Store from './owner/Store'
+import JournalSync from './owner/JournalSync'
 import './index.css'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/walk" element={<WalkSession />} />
         <Route path="/store" element={<Store />} />
+        <Route path="/journal" element={<JournalSync />} />
       </Routes>
     </BrowserRouter>
   )
