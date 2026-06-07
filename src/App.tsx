@@ -1,7 +1,9 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabase'
 import Auth from './auth/Auth'
 import Dashboard from './owner/Dashboard'
+import WalkSession from './owner/WalkSession'
 import './index.css'
 
 function App() {
@@ -21,7 +23,14 @@ function App() {
     return <Auth />
   }
 
-  return <Dashboard />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/walk" element={<WalkSession />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
