@@ -1,0 +1,293 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+
+interface Product {
+  id: string
+  name: string
+  description: string
+  price: number
+  category: string
+  image: string
+}
+
+export default function Store() {
+  const navigate = useNavigate()
+  const [products, setProducts] = useState<Product[]>([])
+  const [cart, setCart] = useState<any[]>([])
+  const [showCart, setShowCart] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  // Mock products (will come from Supabase later)
+  const mockProducts: Product[] = [
+    {
+      id: '1',
+      name: 'XCOOBY Smart Journal',
+      description: 'Rocketbook-style reusable journal with QR sync',
+      price: 39.99,
+      category: 'journal',
+      image: '📓'
+    },
+    {
+      id: '2',
+      name: 'Smart Collar',
+      description: 'GPS tracking + activity monitoring',
+      price: 129.99,
+      category: 'wearable',
+      image: '📿'
+    },
+    {
+      id: '3',
+      name: 'Matching Hoodie Set',
+      description: 'Dog + human matching hoodies',
+      price: 129.99,
+      category: 'fashion',
+      image: '👕'
+    },
+    {
+      id: '4',
+      name: 'QR Sync Stickers',
+      description: 'Turn any notebook into a smart journal',
+      price: 14.99,
+      category: 'accessory',
+      image: '🔘'
+    },
+    {
+      id: '5',
+      name: 'The Dog Ear Bundle',
+      description: 'Journal + collar + training guide',
+      price: 149.99,
+      category: 'bundle',
+      image: '📦'
+    },
+    {
+      id: '6',
+      name: 'Treat Pouch Pro',
+      description: 'Magnetic closure with waste bag dispenser',
+      price: 29.99,
+      category: 'accessory',
+      image: '👜'
+    }
+  ]
+
+  useEffect(() => {
+    // Load products
+    setProducts(mockProducts)
+    
+    // Load cart from localStorage
+    const savedCart = localStorage.getItem('cart')
+    if (savedCart) {
+      setCart(JSON.parse(savedCart))
+    }
+    setLoading(false)
+  }, [])
+
+  const addToCart = (product: Product) => {
+    const existingItem = cart.find(item => item.id === product.id)
+    let newCart
+    
+    if (existingItem) {
+      newCart = cart.map(item =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    } else {
+      newCart = [...cart, { ...product, quantity: 1 }]
+    }
+    
+    setCart(newCart)
+    localStorage.setItem('cart', JSON.stringify(newCart))
+    
+    // Haptic feedback
+    if (navigator.vibrate) navigator.vibrate(50)
+  }
+
+  const removeFromCart = (productId: string) => {
+    const newCart = cart.filter(item => item.id !== productId)
+    setCart(newCart)
+    localStorage.setItem('cart', JSON.stringify(newCart))
+  }
+
+  const updateQuantity = (productId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      removeFromCart(productId)
+      return
+    }
+    const newCart = cart.map(item =>
+      item.id === productId ? { ...item, quantity: newQuantity } : item
+    )
+    setCart(newCart)
+    localStorage.setItem('cart', JSON.stringify(newCart))
+  }
+
+  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+
+  const checkout = () => {
+    alert(`Checkout: $${cartTotal.toFixed(2)}\n\nStripe integration coming soon.`)
+  }
+
+  const categories = ['all', 'journal', 'wearable', 'fashion', 'accessory', 'bundle']
+  const [selectedCategory, setSelectedCategory] = useState('all')
+
+  const filteredProducts = selectedCategory === 'all' 
+    ? products 
+    : products.filter(p => p.category === selectedCategory)
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-xdark flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl mb-2">🛍️</div>
+          <p className="text-xmuted">Loading store...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-xdark pb-24">
+      {/* Header */}
+      <div className="sticky top-0 bg-xdark/95 backdrop-blur-md border-b border-xborder p-5">
+        <div className="flex justify-between items-center">
+          <button onClick={() => navigate(-1)} className="text-xlime">
+            ← Back
+          </button>
+          <h1 className="text-xl font-bold text-xlime">XCOOBY Shop</h1>
+          <button 
+            onClick={() => setShowCart(true)} 
+            className="relative bg-xcard p-2 rounded-full"
+          >
+            🛒
+            {cart.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-xred text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {cart.reduce((sum, item) => sum + item.quantity, 0)}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Categories */}
+      <div className="px-5 py-4 overflow-x-auto">
+        <div className="flex gap-2">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${
+                selectedCategory === cat
+                  ? 'bg-xlime text-xdark font-bold'
+                  : 'bg-xcard text-xmuted'
+              }`}
+            >
+              {cat === 'all' ? 'All' : cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Products Grid */}
+      <div className="px-5">
+        <div className="grid grid-cols-2 gap-4">
+          {filteredProducts.map(product => (
+            <div
+              key={product.id}
+              className="bg-xcard rounded-2xl overflow-hidden border border-xborder hover:border-xlime transition-all"
+            >
+              <div className="p-4 text-center">
+                <div className="text-5xl mb-2">{product.image}</div>
+                <h3 className="font-bold text-sm">{product.name}</h3>
+                <p className="text-xs text-xmuted mt-1 line-clamp-2">{product.description}</p>
+                <p className="text-xlime font-bold mt-2">${product.price}</p>
+                <button
+                  onClick={() => addToCart(product)}
+                  className="w-full mt-3 bg-xsurface border border-xborder py-2 rounded-xl text-sm text-xlime"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Cart Sidebar */}
+      {showCart && (
+        <div className="fixed inset-0 bg-black/80 z-50">
+          <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-xdark border-l border-xborder">
+            <div className="p-5 border-b border-xborder flex justify-between items-center">
+              <h2 className="text-xl font-bold">Your Cart</h2>
+              <button onClick={() => setShowCart(false)} className="text-xmuted text-2xl">
+                ✕
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-5 space-y-3">
+              {cart.length === 0 ? (
+                <div className="text-center py-12 text-xmuted">
+                  <div className="text-5xl mb-3">🛒</div>
+                  <p>Your cart is empty</p>
+                </div>
+              ) : (
+                cart.map(item => (
+                  <div key={item.id} className="bg-xcard rounded-2xl p-3 flex gap-3">
+                    <div className="text-3xl">{item.image}</div>
+                    <div className="flex-1">
+                      <p className="font-bold text-sm">{item.name}</p>
+                      <p className="text-xlime text-sm">${item.price}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          className="w-6 h-6 bg-xsurface rounded-full"
+                        >
+                          -
+                        </button>
+                        <span className="text-sm">{item.quantity}</span>
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          className="w-6 h-6 bg-xsurface rounded-full"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-xred text-sm"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+            
+            {cart.length > 0 && (
+              <div className="p-5 border-t border-xborder">
+                <div className="flex justify-between mb-4">
+                  <span className="font-bold">Total:</span>
+                  <span className="text-2xl font-bold text-xlime">${cartTotal.toFixed(2)}</span>
+                </div>
+                <button
+                  onClick={checkout}
+                  className="w-full bg-xlime text-xdark py-3 rounded-xl font-bold"
+                >
+                  Checkout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Nav */}
+      <div className="fixed bottom-0 left-0 right-0 bg-xsurface border-t border-xborder flex justify-around py-3">
+        <button onClick={() => navigate('/')} className="text-xs text-xmuted">Home</button>
+        <button onClick={() => navigate('/walk')} className="text-xs text-xmuted">Walk</button>
+        <button className="text-xs text-xlime">Store</button>
+        <button className="text-xs text-xmuted">Profile</button>
+      </div>
+    </div>
+  )
+}
