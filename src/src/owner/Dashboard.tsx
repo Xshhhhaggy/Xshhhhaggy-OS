@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [dogName, setDogName] = useState('XCOOBY')
   const [streak, setStreak] = useState(0)
   const [uxBalance, setUxBalance] = useState(100)
@@ -47,7 +49,10 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div className="p-5">
         <div className="grid grid-cols-2 gap-3">
-          <button className="bg-xlime text-xdark p-4 rounded-2xl font-bold">
+          <button 
+            onClick={() => navigate('/walk')}
+            className="bg-xlime text-xdark p-4 rounded-2xl font-bold"
+          >
             🚶 Start Walk
           </button>
           <button className="bg-xcard border border-xborder p-4 rounded-2xl">
