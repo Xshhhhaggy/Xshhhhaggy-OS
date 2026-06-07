@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase'
 import Auth from './auth/Auth'
 import Dashboard from './owner/Dashboard'
 import WalkSession from './owner/WalkSession'
+import Store from './owner/Store'
 import './index.css'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/walk" element={<WalkSession />} />
+        <Route path="/store" element={<Store />} />
       </Routes>
     </BrowserRouter>
   )
