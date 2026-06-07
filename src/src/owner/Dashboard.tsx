@@ -20,7 +20,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-xdark pb-24">
-      {/* Header */}
       <div className="bg-gradient-to-r from-xlime/10 to-xcyan/10 p-5">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-xlime">SLOW</h1>
@@ -29,7 +28,6 @@ export default function Dashboard() {
           </button>
         </div>
         
-        {/* Dog Profile Card */}
         <div className="bg-xcard/50 backdrop-blur rounded-3xl p-5 mt-4">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-r from-xlime to-xcyan flex items-center justify-center text-3xl">
@@ -46,34 +44,23 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div className="p-5">
         <div className="grid grid-cols-2 gap-3">
-          <button 
-            onClick={() => navigate('/walk')}
-            className="bg-xlime text-xdark p-4 rounded-2xl font-bold"
-          >
+          <button onClick={() => navigate('/walk')} className="bg-xlime text-xdark p-4 rounded-2xl font-bold">
             🚶 Start Walk
           </button>
-          <button 
-            onClick={() => navigate('/store')}
-            className="bg-xcard border border-xborder p-4 rounded-2xl"
-          >
+          <button onClick={() => navigate('/store')} className="bg-xcard border border-xborder p-4 rounded-2xl">
             🛍️ Shop
           </button>
-          <button 
-            onClick={() => navigate('/journal')}
-            className="bg-xcard border border-xborder p-4 rounded-2xl"
-          >
+          <button onClick={() => navigate('/journal')} className="bg-xcard border border-xborder p-4 rounded-2xl">
             📓 Journal
           </button>
-          <button className="bg-xcard border border-xborder p-4 rounded-2xl">
+          <button onClick={() => navigate('/leaderboard')} className="bg-xcard border border-xborder p-4 rounded-2xl">
             🏆 Leaderboard
           </button>
         </div>
       </div>
 
-      {/* Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 bg-xsurface border-t border-xborder flex justify-around py-3">
         <button className="text-xs text-xlime">Home</button>
         <button onClick={() => navigate('/walk')} className="text-xs text-xmuted">Walk</button>
