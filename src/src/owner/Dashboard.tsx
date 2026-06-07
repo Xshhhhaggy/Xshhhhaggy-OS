@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import DailyChallenge from '../components/DailyChallenge'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -45,7 +46,7 @@ export default function Dashboard() {
       </div>
 
       <div className="p-5">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mb-6">
           <button onClick={() => navigate('/walk')} className="bg-xlime text-xdark p-4 rounded-2xl font-bold">
             🚶 Start Walk
           </button>
@@ -59,6 +60,9 @@ export default function Dashboard() {
             🏆 Leaderboard
           </button>
         </div>
+
+        {/* Daily Challenge Component */}
+        <DailyChallenge />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 bg-xsurface border-t border-xborder flex justify-around py-3">
