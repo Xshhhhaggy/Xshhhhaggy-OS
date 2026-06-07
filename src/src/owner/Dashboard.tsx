@@ -50,6 +50,9 @@ export default function Dashboard() {
           <button onClick={() => navigate('/walk')} className="bg-xlime text-xdark p-4 rounded-2xl font-bold">
             🚶 Start Walk
           </button>
+          <button onClick={() => navigate('/sniffari')} className="bg-xcard border border-xborder p-4 rounded-2xl">
+            👃 Sniffari
+          </button>
           <button onClick={() => navigate('/store')} className="bg-xcard border border-xborder p-4 rounded-2xl">
             🛍️ Shop
           </button>
@@ -61,7 +64,6 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Daily Challenge Component */}
         <DailyChallenge />
       </div>
 
